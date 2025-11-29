@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './pages/Hero';
+import About from './pages/About';
+import Skills from './pages/Skills';
+import Experience from './pages/Experience';
 import Projects from './pages/Projects';
-// Import pages lain (About, Skills, Contact) jika sudah dibuat
+import Contact from './pages/Contact';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -26,6 +29,24 @@ function App() {
     }
   };
 
+  // Update active section on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['home', 'about', 'skills', 'experience', 'projects', 'contact'];
+      const scrollPosition = window.scrollY + 100;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element && element.offsetTop <= scrollPosition && (element.offsetTop + element.offsetHeight) > scrollPosition) {
+          setActiveSection(section);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark:bg-slate-950' : 'bg-slate-50'}`}>
       <Navbar 
@@ -37,13 +58,15 @@ function App() {
       
       <main>
         <Hero scrollTo={scrollTo} />
-        {/* Tambahkan komponen About, Skills disini nanti */}
+        <About />
+        <Skills />
+        <Experience />
         <Projects />
-        {/* Tambahkan komponen Contact disini nanti */}
+        <Contact />
       </main>
 
-      <footer className="py-8 text-center text-slate-500 dark:text-slate-400 text-sm">
-        © 2025 Portofolio Saya.
+      <footer className="py-8 text-center text-slate-500 dark:text-slate-400 text-sm bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+        © {new Date().getFullYear()} Portofolio Saya. Dibuat dengan React & Tailwind.
       </footer>
     </div>
   );
